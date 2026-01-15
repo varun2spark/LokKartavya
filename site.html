@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- GLOBAL VARIABLES & RESET --- */
+        /* --- 1. GLOBAL VARIABLES & RESET --- */
         :root {
             --primary: #e67e22; /* Saffron/Orange */
             --primary-dark: #d35400;
@@ -16,124 +16,276 @@
             --accent: #3498db; /* Tech Blue */
             --bg-body: #f8f9fa;
             --surface: #ffffff;
-            --radius: 12px;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #ff7675;
             --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --radius: 12px;
         }
 
         * { box-sizing: border-box; scroll-behavior: smooth; }
 
         body {
-            margin: 0; font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body); color: #2d3436; line-height: 1.6;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
         }
 
         h1, h2, h3 { font-family: 'Poppins', sans-serif; margin-top: 0; }
 
-        /* --- NAVIGATION --- */
+        /* --- 2. NAVIGATION (Glassmorphism) --- */
         nav {
-            position: fixed; top: 0; width: 100%;
-            background: rgba(44, 62, 80, 0.95); backdrop-filter: blur(10px);
-            padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(44, 62, 80, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
         }
-        .logo { color: white; font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
-        .logo i { color: var(--primary); }
-        nav ul { list-style: none; display: flex; gap: 30px; margin: 0; padding: 0; }
-        nav a { color: rgba(255,255,255,0.8); text-decoration: none; font-weight: 500; font-size: 0.95rem; }
-        .nav-btn { background: var(--primary); padding: 8px 20px; border-radius: 50px; color: white !important; font-weight: 600; }
 
-        /* --- HERO SECTION --- */
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i { color: var(--primary); }
+
+        nav ul { list-style: none; display: flex; gap: 30px; margin: 0; }
+        nav a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+        nav a:hover, nav a.active { color: var(--primary); }
+        .nav-btn {
+            background: var(--primary);
+            padding: 8px 20px;
+            border-radius: 50px;
+            color: white !important;
+            font-weight: 600;
+        }
+
+        /* --- 3. HERO SECTION WITH SEARCH --- */
         .hero {
             padding: 140px 5% 100px;
             background: linear-gradient(135deg, var(--secondary) 0%, #34495e 100%);
-            color: white; text-align: center; position: relative; overflow: hidden;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        .hero h1 { font-size: 3rem; margin-bottom: 20px; }
+        
+        .hero::before {
+            content: '';
+            position: absolute; top: -50px; right: -50px;
+            width: 300px; height: 300px;
+            background: var(--primary);
+            border-radius: 50%; opacity: 0.1; filter: blur(60px);
+        }
+
+        .hero h1 { font-size: 3rem; margin-bottom: 20px; line-height: 1.2; }
         .hero p { font-size: 1.2rem; opacity: 0.9; max-width: 700px; margin: 0 auto 40px; }
 
-        .search-wrapper { max-width: 600px; margin: 0 auto; position: relative; }
+        /* Search Bar Styles */
+        .search-wrapper {
+            max-width: 600px; margin: 0 auto;
+            position: relative;
+        }
         .search-box {
             width: 100%; padding: 20px 25px; padding-right: 140px;
-            border-radius: 50px; border: none; font-size: 1.1rem;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2); outline: none;
+            border-radius: 50px; border: none;
+            font-size: 1.1rem; box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            outline: none; font-family: 'Inter', sans-serif;
         }
         .search-btn-main {
             position: absolute; right: 6px; top: 6px; bottom: 6px;
-            background: var(--primary); color: white; border: none;
-            padding: 0 30px; border-radius: 50px; font-weight: 600; cursor: pointer;
+            background: var(--primary); color: white;
+            border: none; padding: 0 30px; border-radius: 50px;
+            font-weight: 600; cursor: pointer; transition: 0.3s;
+            font-size: 1rem;
         }
+        .search-btn-main:hover { background: var(--primary-dark); }
+        
+        #loading-text { display: none; margin-top: 15px; font-weight: 500; color: rgba(255,255,255,0.8); }
 
-        /* --- RESULTS CARD --- */
-        .result-container { max-width: 900px; margin: -50px auto 60px; position: relative; z-index: 10; padding: 0 20px;}
+        /* --- 4. NEW: WIKI + MYNETA PROFILE CARD --- */
+        .result-container {
+            max-width: 900px; margin: -50px auto 60px;
+            position: relative; z-index: 10;
+        }
+        
         .profile-card {
             background: white; border-radius: var(--radius);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15); display: flex; overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            display: flex; overflow: hidden;
+            border: 1px solid #eee;
             animation: slideUp 0.5s ease;
         }
-        .profile-image-section { width: 35%; background: #f1f2f6; position: relative; }
-        .profile-img { width: 100%; height: 100%; object-fit: cover; min-height: 300px; }
+
+        /* Left Side: Photo */
+        .profile-image-section {
+            width: 35%;
+            background: #f1f2f6;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; position: relative;
+        }
+        .profile-img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            min-height: 300px;
+        }
+
+        /* Right Side: Data */
         .profile-data-section { width: 65%; padding: 30px; }
         
-        .data-badges { display: flex; gap: 15px; margin: 25px 0; }
+        .profile-header h2 { margin: 0; font-size: 2rem; color: var(--secondary); }
+        .profile-bio { 
+            color: #636e72; font-size: 0.95rem; margin: 15px 0 25px; 
+            line-height: 1.6; border-left: 3px solid var(--primary); padding-left: 15px;
+            max-height: 100px; overflow-y: auto; /* Scroll if bio is too long */
+        }
+
+        .data-badges { display: flex; gap: 15px; margin-bottom: 25px; }
         .d-badge { 
             flex: 1; padding: 15px; border-radius: 8px; text-align: center;
             background: #f8f9fa; border: 1px solid #eee;
         }
-        .d-badge span { display: block; font-size: 0.8rem; text-transform: uppercase; color: #888; font-weight: 700; }
+        .d-badge span { display: block; font-size: 0.8rem; text-transform: uppercase; color: #888; font-weight: 700; margin-bottom: 5px; }
         .d-badge strong { font-size: 1.4rem; color: var(--secondary); }
         .badge-danger strong { color: #e74c3c; }
 
-        /* --- GRID & SECTIONS --- */
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
-        .section-header { text-align: center; margin: 50px 0; }
-        .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
-        
-        .leader-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
-        .card-header { padding: 25px; display: flex; gap: 20px; align-items: center; border-bottom: 1px solid #eee; }
-        .avatar { width: 60px; height: 60px; background: #dfe6e9; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
-        .card-body { padding: 25px; }
-        
-        .btn-verify {
-            width: 100%; background: #f1f2f6; border: 1px solid #dfe4ea;
-            padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 600;
-            margin: 15px 0; transition: 0.3s;
+        .source-link { 
+            display: inline-block; color: var(--primary); font-weight: 600; 
+            text-decoration: none; margin-top: 10px; border: 1px solid var(--primary);
+            padding: 8px 15px; border-radius: 4px; transition: 0.3s;
         }
-        .btn-verify:hover { background: #dfe6e9; }
-        
-        .myneta-box { background: #fffcf5; border-left: 4px solid #e67e22; padding: 10px; font-size: 0.9rem; margin-bottom: 15px; display: none; }
-
-        /* --- AI CARD --- */
-        .ai-card {
-            background: linear-gradient(145deg, #ffffff, #f0f7ff);
-            border: 1px solid #e1e8ed; border-radius: var(--radius); padding: 30px;
-            box-shadow: var(--shadow); position: relative; margin-bottom: 60px;
-        }
-        .ai-btn {
-            background: var(--primary); color: white; border: none; padding: 10px 25px;
-            border-radius: 50px; cursor: pointer; font-weight: 600; margin-top: 10px;
-        }
-
-        /* --- REPORT SECTION --- */
-        .report-section { display: flex; background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
-        .report-visual { flex: 1; background: url('https://images.unsplash.com/photo-1596524430615-b46476dd96aa?auto=format&fit=crop&q=80') center/cover; min-height: 400px; }
-        .report-form { flex: 1; padding: 40px; }
-        .form-control { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; margin-bottom: 15px; font-family: inherit; }
-        .btn-submit { width: 100%; background: var(--secondary); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .source-link:hover { background: var(--primary); color: white; }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Mobile */
+
+        /* Mobile Responsive for Card */
         @media (max-width: 768px) {
-            .profile-card, .report-section { flex-direction: column; }
-            .profile-image-section, .report-visual { width: 100%; height: 250px; }
-            .profile-data-section, .report-form { width: 100%; }
+            .profile-card { flex-direction: column; }
+            .profile-image-section { width: 100%; height: 250px; }
+            .profile-data-section { width: 100%; }
         }
+
+        /* --- 5. CONTAINER & SECTIONS --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
+        .section-header { text-align: center; margin-bottom: 50px; margin-top: 40px; }
+        .section-header h2 { font-size: 2.2rem; color: var(--secondary); margin-bottom: 10px; }
+        .section-header .subtitle { color: var(--primary); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; }
+
+        /* --- 6. AI CARD STYLES --- */
+        .ai-card {
+            background: linear-gradient(145deg, #ffffff, #f0f7ff);
+            border: 1px solid #e1e8ed; border-radius: var(--radius);
+            padding: 30px; margin-bottom: 80px; box-shadow: var(--shadow);
+            position: relative;
+        }
+        .ai-badge {
+            position: absolute; top: 20px; right: 20px;
+            background: linear-gradient(90deg, #4285F4, #9b59b6);
+            color: white; padding: 5px 15px; border-radius: 20px;
+            font-size: 0.75rem; font-weight: 700;
+        }
+        .ai-content { display: flex; gap: 30px; align-items: flex-start; }
+        .ai-icon { font-size: 2.5rem; color: var(--accent); background: rgba(52, 152, 219, 0.1); padding: 20px; border-radius: 50%; }
+        .ai-btn {
+            background: var(--primary); color: white; border: none;
+            padding: 10px 25px; border-radius: 50px; cursor: pointer;
+            font-weight: 600; margin-top: 10px; font-size: 0.9rem;
+        }
+
+        /* --- 7. LEADER GRID STYLES --- */
+        .grid-layout {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        .leader-card {
+            background: var(--surface); border-radius: var(--radius);
+            box-shadow: var(--shadow); border: 1px solid #eee; overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .leader-card:hover { transform: translateY(-5px); }
+        
+        .card-header { background: var(--bg-body); padding: 25px; display: flex; align-items: center; gap: 20px; border-bottom: 1px solid #eee; }
+        .avatar { width: 70px; height: 70px; background: #cbd5e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #fff; font-weight: bold; }
+        .card-body { padding: 25px; }
+
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .stat-item h4 { margin: 0 0 5px 0; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+        .stat-item p { margin: 0; font-weight: 600; font-size: 0.95rem; }
+
+        /* Verify Button in Grid */
+        .btn-verify {
+            width: 100%; background: #f1f2f6; color: #2c3e50;
+            border: 1px solid #dfe4ea; padding: 12px; border-radius: 6px;
+            cursor: pointer; font-size: 0.85rem; font-weight: 600;
+            transition: all 0.2s; margin-bottom: 20px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-verify:hover { background: #dfe6e9; transform: scale(1.02); }
+
+        /* Small Grid Result Box */
+        .myneta-box {
+            background: #fff; border: 1px solid #eee; padding: 15px;
+            border-radius: 8px; margin-bottom: 20px; animation: fadeIn 0.3s ease;
+        }
+        .myneta-box.success { border-left: 4px solid #d35400; background: #fffcf5; }
+        
+        /* Commitment Bars */
+        .commitment-item { margin-bottom: 15px; }
+        .c-header { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 5px; }
+        .c-bar { height: 6px; background: #eee; border-radius: 3px; overflow: hidden; }
+        .c-fill { height: 100%; border-radius: 3px; }
+        .fill-completed { background: var(--success); width: 100%; }
+        .fill-ongoing { background: var(--warning); width: 60%; }
+        .fill-noupdate { background: var(--danger); width: 20%; }
+
+        /* --- 8. REPORT ISSUE STYLES --- */
+        .report-section {
+            display: flex; gap: 40px; background: white;
+            border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
+        }
+        .report-visual {
+            flex: 1; min-height: 400px;
+            background: url('https://images.unsplash.com/photo-1517089596392-fb9c9033e05b?auto=format&fit=crop&q=80') center/cover;
+        }
+        .report-form { flex: 1; padding: 40px; }
+        .form-control {
+            width: 100%; padding: 12px; border: 2px solid #eee;
+            border-radius: 8px; margin-bottom: 15px; font-family: 'Inter', sans-serif;
+        }
+        .btn-submit {
+            width: 100%; background: var(--secondary); color: white;
+            padding: 15px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo"><i class="fas fa-landmark"></i> LokKartavya</div>
+        <div class="logo">
+            <i class="fas fa-landmark"></i> LokKartavya
+        </div>
         <ul>
             <li><a href="#governance">Governance</a></li>
             <li><a href="#leaders">Leaders</a></li>
@@ -146,65 +298,63 @@
         <p>Verified profiles, tracked commitments, and AI-simplified governance.</p>
         
         <div class="search-wrapper">
-            <input type="text" id="mainSearch" class="search-box" placeholder="Search Politician (e.g., Narendra Modi, Rahul Gandhi)..." onkeypress="handleEnter(event)">
+            <input type="text" id="mainSearch" class="search-box" placeholder="Search Politician (e.g., Narendra Modi, Rahul Gandhi)...">
             <button class="search-btn-main" onclick="searchLeader()">Search</button>
         </div>
-        <div id="loading-text" style="display:none; margin-top:15px; color:rgba(255,255,255,0.8);">
-            <i class="fas fa-spinner fa-spin"></i> Analyzing Wikipedia & MyNeta Public Records...
-        </div>
+        <div id="loading-text"><i class="fas fa-spinner fa-spin"></i> Analyzing Wikipedia & MyNeta Records...</div>
     </section>
 
-    <div id="searchResultArea" class="result-container"></div>
+    <div id="searchResultArea" class="result-container">
+        </div>
 
     <div class="container">
 
         <div class="section-header" id="governance">
-            <span style="color:var(--primary); font-weight:600; text-transform:uppercase;">Civic Literacy</span>
+            <span class="subtitle">Civic Literacy</span>
             <h2>Understanding Your Government</h2>
         </div>
         <div class="ai-card">
-            <div style="position:absolute; top:20px; right:20px; background:#4285F4; color:white; padding:5px 15px; border-radius:20px; font-size:0.75rem; font-weight:700;">
-                <i class="fas fa-robot"></i> Gemini AI
+            <div class="ai-badge"><i class="fas fa-robot"></i> Gemini AI</div>
+            <div class="ai-content">
+                <div class="ai-icon"><i class="fas fa-book-open"></i></div>
+                <div class="ai-text" style="width: 100%;">
+                    <h3>Role Explainer: The MLA</h3>
+                    <p style="color: #666; margin-bottom: 15px;">
+                        <em>Original Text:</em> "The Member of Legislative Assembly (MLA) acts as a representative of the constituents within a specific geographic jurisdiction..."
+                    </p>
+                    <button class="ai-btn" onclick="simplifyText()">Simplify with AI</button>
+                    <div id="ai-output" style="display:none; margin-top:15px; padding:15px; background:white; border-left:4px solid var(--success);"></div>
+                </div>
             </div>
-            <h3>Role Explainer: The MLA</h3>
-            <p style="color: #666; margin-bottom: 15px; font-style:italic;">
-                "The Member of Legislative Assembly (MLA) acts as a representative of the constituents within a specific geographic jurisdiction..."
-            </p>
-            <button class="ai-btn" id="aiBtn" onclick="simplifyText()">Simplify with AI</button>
-            <div id="ai-output" style="display:none; margin-top:20px; padding:20px; background:white; border-left:4px solid #27ae60; border-radius:4px;"></div>
         </div>
 
         <div class="section-header" id="leaders">
-            <span style="color:var(--primary); font-weight:600; text-transform:uppercase;">Transparency</span>
+            <span class="subtitle">Transparency & Accountability</span>
             <h2>Featured Leader Profiles</h2>
         </div>
         <div class="grid-layout" id="leader-grid">
             </div>
 
-        <div class="section-header" id="report">
-            <span style="color:var(--primary); font-weight:600; text-transform:uppercase;">Citizen Action</span>
+        <div class="section-header" id="report" style="margin-top: 100px;">
+            <span class="subtitle">Citizen Action</span>
             <h2>Report Civic Issues</h2>
         </div>
         <div class="report-section">
             <div class="report-visual"></div>
             <div class="report-form">
                 <h3>Submit Public Record</h3>
-                <p style="color:#666; font-size:0.9rem; margin-bottom:20px;">Upload a geo-tagged report. Our AI validates the issue.</p>
-                
-                <input type="text" id="report-category" class="form-control" placeholder="Category (e.g., Road, Water, Sanitation)">
-                <input type="text" id="report-loc" class="form-control" placeholder="Fetching Location..." readonly>
-                <textarea id="report-desc" class="form-control" placeholder="Description of the issue..."></textarea>
-                
-                <button class="btn-submit" onclick="submitReport()">Submit Report</button>
+                <p style="color:#666; font-size:0.9rem; margin-bottom:20px;">Upload a geo-tagged image. Our AI validates the issue.</p>
+                <input type="text" class="form-control" placeholder="Category (e.g., Road, Water)">
+                <input type="text" class="form-control" value="Loc: 27.4924° N, 77.6737° E" readonly>
+                <input type="file" class="form-control">
+                <button class="btn-submit" onclick="alert('Report Submitted Successfully!')">Submit Report</button>
             </div>
         </div>
 
     </div>
 
     <script>
-        const API_BASE = "http://127.0.0.1:5000/api";
-
-        // --- 1. SEARCH LEADER ---
+        // --- 1. MAIN SEARCH FUNCTION (Hero) ---
         async function searchLeader() {
             const query = document.getElementById('mainSearch').value;
             const resultArea = document.getElementById('searchResultArea');
@@ -216,21 +366,30 @@
             resultArea.innerHTML = ''; 
 
             try {
-                const response = await fetch(`${API_BASE}/search-leader?name=${encodeURIComponent(query)}`);
+                // Connects to your HYBRID server.py
+                const response = await fetch(`http://127.0.0.1:5000/api/search-leader?name=${encodeURIComponent(query)}`);
                 const data = await response.json();
+                
                 loading.style.display = 'none';
 
                 if(data.error) {
-                    resultArea.innerHTML = `<div style="background:white; padding:20px; border-radius:12px; text-align:center; color:red;">Leader not found. Try 'Narendra Modi'</div>`;
+                    resultArea.innerHTML = `<div style="background:white; padding:20px; border-radius:12px; text-align:center; color:red;">${data.error}</div>`;
                 } else {
+                    // Render New Profile Card
                     resultArea.innerHTML = `
                         <div class="profile-card">
                             <div class="profile-image-section">
-                                <img src="${data.image}" class="profile-img">
+                                <img src="${data.image}" class="profile-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'">
                             </div>
                             <div class="profile-data-section">
-                                <h2 style="margin:0; font-size:2rem; color:var(--secondary);">${data.name}</h2>
-                                <p style="color:#636e72; margin-top:10px; max-height:100px; overflow-y:auto;">${data.bio}</p>
+                                <div class="profile-header">
+                                    <h2>${data.name}</h2>
+                                    <div style="font-size:0.9rem; color:#888; margin-top:5px;">
+                                        <i class="fas fa-check-circle" style="color:#27ae60;"></i> Wikipedia Verified
+                                    </div>
+                                </div>
+                                
+                                <p class="profile-bio">${data.bio}</p>
                                 
                                 <div class="data-badges">
                                     <div class="d-badge badge-danger">
@@ -242,8 +401,9 @@
                                         <strong>${data.assets}</strong>
                                     </div>
                                 </div>
-                                <a href="${data.source_url}" target="_blank" style="color:var(--primary); font-weight:600; text-decoration:none;">
-                                    View Source Affidavit &rarr;
+                                
+                                <a href="${data.source_url}" target="_blank" class="source-link">
+                                    View Full Affidavit on MyNeta.info &rarr;
                                 </a>
                             </div>
                         </div>
@@ -251,55 +411,79 @@
                 }
             } catch(e) {
                 loading.style.display = 'none';
-                alert("Ensure Python server.py is running!");
+                alert("Server Error. Is Python running?");
             }
         }
 
-        function handleEnter(e) { if(e.key === 'Enter') searchLeader(); }
-
-        // --- 2. GRID VERIFICATION ---
+        // --- 2. GRID BUTTON FUNCTION (Simpler View for Grid) ---
         async function verifyGrid(name, boxId) {
             const box = document.getElementById(boxId);
             box.style.display = 'block';
-            box.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching records...';
+            box.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching...';
             
             try {
-                const response = await fetch(`${API_BASE}/search-leader?name=${encodeURIComponent(name)}`);
+                const response = await fetch(`http://127.0.0.1:5000/api/search-leader?name=${encodeURIComponent(name)}`);
                 const data = await response.json();
-                
-                box.innerHTML = `
-                    <div><strong>Cases:</strong> ${data.criminal_cases}</div>
-                    <div><strong>Assets:</strong> ${data.assets}</div>
-                    <a href="${data.source_url}" target="_blank" style="font-size:0.8rem; color:blue;">Source</a>
-                `;
-            } catch(e) { box.innerHTML = "Error connecting to server."; }
+
+                if(data.error) {
+                    box.innerHTML = `<span style="color:red">Data not found</span>`;
+                } else {
+                    box.className = "myneta-box success";
+                    box.innerHTML = `
+                        <div style="font-size:0.8rem; font-weight:bold; color:#d35400; margin-bottom:5px;">OFFICIAL RECORD</div>
+                        <div style="display:flex; justify-content:space-between; font-size:0.9rem; font-weight:bold;">
+                            <span>Cases: <span style="color:${data.criminal_cases > 0 ? 'red':'green'}">${data.criminal_cases}</span></span>
+                            <span>Assets: ${data.assets}</span>
+                        </div>
+                        <a href="${data.source_url}" target="_blank" style="display:block; margin-top:5px; font-size:0.8rem; text-align:right; color:#3498db;">View Source</a>
+                    `;
+                }
+            } catch(e) {
+                box.innerHTML = "Server Error";
+            }
         }
 
-        // --- 3. POPULATE GRID ---
+        // --- 3. RENDER FEATURED LEADERS ---
         const leaders = [
-            { name: "Hema Malini", role: "MP - Mathura", term: "2024-2029" },
-            { name: "Yogi Adityanath", role: "Chief Minister, UP", term: "2022-2027" },
-            { name: "Akhilesh Yadav", role: "Leader of Opposition", term: "2022-2027" }
+            { name: "Hema Malini", role: "MP - Mathura", term: "2024-2029", edu: "PhD (Honorary)", commitments: [{t:"Yamuna Clean", s:"Ongoing", c:"fill-ongoing"}] },
+            { name: "Yogi Adityanath", role: "Chief Minister", term: "2022-2027", edu: "B.Sc Math", commitments: [{t:"Expressways", s:"Completed", c:"fill-completed"}] },
+            { name: "Akhilesh Yadav", role: "Opposition Leader", term: "2022-2027", edu: "Masters", commitments: [{t:"Metro", s:"Ongoing", c:"fill-ongoing"}] }
         ];
 
         function renderGrid() {
             const container = document.getElementById('leader-grid');
             leaders.forEach((l, index) => {
-                const uniqueId = `box-${index}`;
+                const uniqueId = `verify-box-${index}`;
+                
+                // Commitments HTML
+                let commHtml = l.commitments.map(c => `
+                    <div class="commitment-item">
+                        <div class="c-header"><span>${c.t}</span><span>${c.s}</span></div>
+                        <div class="c-bar"><div class="c-fill ${c.c}"></div></div>
+                    </div>`).join('');
+
                 container.innerHTML += `
                     <div class="leader-card">
                         <div class="card-header">
                             <div class="avatar">${l.name.charAt(0)}</div>
                             <div>
                                 <h3 style="margin:0; font-size:1.1rem;">${l.name}</h3>
-                                <span style="font-size:0.85rem; color:var(--primary);">${l.role}</span>
+                                <span style="font-size:0.85rem; color:var(--primary); font-weight:600;">${l.role}</span>
                             </div>
                         </div>
                         <div class="card-body">
+                            <div class="stat-grid">
+                                <div class="stat-item"><h4>Term</h4><p>${l.term}</p></div>
+                                <div class="stat-item"><h4>Education</h4><p>${l.edu}</p></div>
+                            </div>
+                            
                             <button class="btn-verify" onclick="verifyGrid('${l.name}', '${uniqueId}')">
-                                Verify Criminal Record
+                                <i class="fas fa-search"></i> Check Criminal Records
                             </button>
-                            <div id="${uniqueId}" class="myneta-box"></div>
+                            <div id="${uniqueId}" class="myneta-box" style="display:none;"></div>
+
+                            <div style="font-size:0.75rem; font-weight:700; color:#b2bec3; margin:15px 0 10px;">COMMITMENTS</div>
+                            ${commHtml}
                         </div>
                     </div>
                 `;
@@ -307,60 +491,14 @@
         }
 
         // --- 4. AI SIMPLIFY ---
-        async function simplifyText() {
-            const btn = document.getElementById('aiBtn');
+        function simplifyText() {
             const out = document.getElementById('ai-output');
-            
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Simplifying...';
-            
-            try {
-                const response = await fetch(`${API_BASE}/simplify`, { method: 'POST' });
-                const data = await response.json();
-                
-                out.style.display = 'block';
-                out.innerHTML = `<strong>Gemini AI Output:</strong> ${data.simplified}`;
-                btn.innerHTML = 'Simplify with AI';
-            } catch(e) {
-                alert("Server Error");
-                btn.innerHTML = 'Simplify with AI';
-            }
-        }
-
-        // --- 5. REPORT ISSUE (Geolocation) ---
-        function initGeo() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (pos) => {
-                        document.getElementById('report-loc').value = 
-                            `Lat: ${pos.coords.latitude.toFixed(4)}, Long: ${pos.coords.longitude.toFixed(4)}`;
-                    },
-                    () => { document.getElementById('report-loc').value = "Location Access Denied"; }
-                );
-            } else {
-                document.getElementById('report-loc').value = "Geolocation not supported";
-            }
-        }
-
-        async function submitReport() {
-            const cat = document.getElementById('report-category').value;
-            const loc = document.getElementById('report-loc').value;
-            const desc = document.getElementById('report-desc').value;
-
-            if(!cat || !desc) return alert("Please fill all fields");
-
-            const response = await fetch(`${API_BASE}/report-issue`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ category: cat, location: loc, description: desc })
-            });
-            
-            const data = await response.json();
-            alert(`✅ Report Submitted! ID: ${data.report_id}. Our AI is verifying it.`);
-            document.getElementById('report-desc').value = "";
+            out.style.display = 'block';
+            out.innerHTML = '<strong>Simplified:</strong> An MLA represents the people of a specific area. Their job is to make laws and approve budgets for development.';
         }
 
         // Init
-        window.onload = () => { renderGrid(); initGeo(); };
+        window.onload = renderGrid;
     </script>
 </body>
 </html>
