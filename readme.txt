@@ -1,4 +1,4 @@
-⚙️ How to Run the Project (Step-by-Step):-
+How to Run the Project (Step-by-Step):-
 
 Install Python if you haven't already.
 Check version: python --version
@@ -17,4 +17,5 @@ Run: pip install -r requirements.txt
 Run: python server.py
 
 Open site.html in your browser.
+
 
