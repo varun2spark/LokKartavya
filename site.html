@@ -288,6 +288,7 @@
         </div>
         <ul>
             <li><a href="#governance">Governance</a></li>
+            <li><a href="#budget">Budgets</a></li>
             <li><a href="#leaders">Leaders</a></li>
             <li><a href="#report" class="nav-btn">Report Issue</a></li>
         </ul>
@@ -326,6 +327,133 @@
                     <div id="ai-output" style="display:none; margin-top:15px; padding:15px; background:white; border-left:4px solid var(--success);"></div>
                 </div>
             </div>
+        </div>
+
+        <div class="section-header" id="budget">
+            <span class="subtitle">Public Funds</span>
+            <h2>Budget Expenditure Tracker</h2>
+        </div>
+        
+        <div class="budget-card" style="background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 80px; border: 1px solid #eee;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <h3 style="margin: 0; color: var(--secondary);">MLA Local Area Development Scheme (MLA-LADS)</h3>
+                <span style="background: var(--success); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">Financial Year 2023-24</span>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid var(--accent);">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 5px;">Total Allocated</div>
+                    <div style="font-size: 1.8rem; font-weight: 700; color: var(--secondary);">₹5.00 Cr</div>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid var(--success);">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 5px;">Amount Spent</div>
+                    <div style="font-size: 1.8rem; font-weight: 700; color: var(--secondary);">₹3.20 Cr</div>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid var(--warning);">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 5px;">Amount Unspent</div>
+                    <div style="font-size: 1.8rem; font-weight: 700; color: var(--secondary);">₹1.80 Cr</div>
+                </div>
+            </div>
+
+            <div>
+                <h4 style="margin: 0 0 15px 0; color: var(--text-main);">Top Expenditures</h4>
+                
+                <div style="margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px; font-weight: 500;">
+                        <span>Road Construction</span>
+                        <span>₹1.50 Cr (46%)</span>
+                    </div>
+                    <div style="height: 8px; background: #eee; border-radius: 4px; overflow: hidden;">
+                        <div style="width: 46%; height: 100%; background: #3498db; border-radius: 4px;"></div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px; font-weight: 500;">
+                        <span>Drinking Water Facilities</span>
+                        <span>₹1.00 Cr (31%)</span>
+                    </div>
+                    <div style="height: 8px; background: #eee; border-radius: 4px; overflow: hidden;">
+                        <div style="width: 31%; height: 100%; background: #9b59b6; border-radius: 4px;"></div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px; font-weight: 500;">
+                        <span>Education & Schools</span>
+                        <span>₹0.70 Cr (21%)</span>
+                    </div>
+                    <div style="height: 8px; background: #eee; border-radius: 4px; overflow: hidden;">
+                        <div style="width: 21%; height: 100%; background: #f1c40f; border-radius: 4px;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn-verify" style="margin-top: 25px; max-width: 300px; margin-left: auto; margin-right: auto;" onclick="alert('Downloading detailed PDF report...')">
+                <i class="fas fa-download"></i> Download Full Expenditure Report
+            </button>
+        </div>
+
+        <div class="budget-card" style="background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 80px; border: 1px solid #eee;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <h3 style="margin: 0; color: var(--secondary);">Education Expenditure Overview</h3>
+                <span style="background: var(--accent); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">Sector Analysis</span>
+            </div>
+            
+            <p style="color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem;">
+                A detailed breakdown of the ₹0.70 Cr allocated to the Education sector, focusing on improving school infrastructure, digital learning, and student welfare across constituency schools.
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid var(--accent);">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 5px;">Smart Classrooms</div>
+                    <div style="font-size: 1.8rem; font-weight: 700; color: var(--secondary);">₹0.30 Cr</div>
+                    <div style="font-size: 0.85rem; color: var(--success); margin-top: 8px; font-weight: 500;"><i class="fas fa-check-circle"></i> 10 Schools Upgraded</div>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid var(--success);">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 5px;">School Repairs</div>
+                    <div style="font-size: 1.8rem; font-weight: 700; color: var(--secondary);">₹0.25 Cr</div>
+                    <div style="font-size: 0.85rem; color: var(--warning); margin-top: 8px; font-weight: 500;"><i class="fas fa-tools"></i> 5 Ongoing Projects</div>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid var(--primary);">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 5px;">Student Scholarships</div>
+                    <div style="font-size: 1.8rem; font-weight: 700; color: var(--secondary);">₹0.15 Cr</div>
+                    <div style="font-size: 0.85rem; color: var(--success); margin-top: 8px; font-weight: 500;"><i class="fas fa-user-graduate"></i> 500+ Beneficiaries</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="budget-card" style="background: white; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 80px; border: 1px solid #eee;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <h3 style="margin: 0; color: var(--secondary);">Election Spending Limits</h3>
+                <span style="background: var(--warning); color: #fff; padding: 5px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">Compliance & Oversight</span>
+            </div>
+            
+            <p style="color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem;">
+                Statutory limits set by the Election Commission of India (ECI) for candidate expenditures during Lok Sabha and Assembly elections to ensure a level playing field.
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #e67e22;">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 5px;">Lok Sabha (MP)</div>
+                    <div style="font-size: 1.8rem; font-weight: 700; color: var(--secondary);">₹95.00 L</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px; font-weight: 500;">Per candidate (Large States)</div>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #3498db;">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 5px;">Assembly (MLA)</div>
+                    <div style="font-size: 1.8rem; font-weight: 700; color: var(--secondary);">₹40.00 L</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px; font-weight: 500;">Per candidate (Large States)</div>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #2ecc71;">
+                    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 5px;">Monitored By</div>
+                    <div style="font-size: 1.2rem; font-weight: 700; color: var(--secondary); margin-top: 10px;">Election Commission</div>
+                    <div style="font-size: 0.85rem; color: var(--success); margin-top: 8px; font-weight: 500;"><i class="fas fa-shield-alt"></i> Expenditure Observers</div>
+                </div>
+            </div>
+            
+            <button class="btn-verify" style="margin-top: 25px; max-width: 300px; margin-left: auto; margin-right: auto;" onclick="alert('Viewing detailed ECI guidelines...')">
+                <i class="fas fa-file-contract"></i> Read ECI Guidelines
+            </button>
         </div>
 
         <div class="section-header" id="leaders">
@@ -391,7 +519,7 @@
                                 
                                 <p class="profile-bio">${data.bio}</p>
                                 
-                                <div class="data-badges">
+                                <div class="data-badges" style="margin-bottom: 15px;">
                                     <div class="d-badge badge-danger">
                                         <span>Criminal Cases</span>
                                         <strong>${data.criminal_cases}</strong>
@@ -399,6 +527,22 @@
                                     <div class="d-badge">
                                         <span>Total Assets</span>
                                         <strong>${data.assets}</strong>
+                                    </div>
+                                </div>
+                                
+                                <div style="font-size:0.8rem; font-weight:700; color:#b2bec3; margin:20px 0 10px;">EXPENDITURE SPENDING</div>
+                                <div class="data-badges">
+                                    <div class="d-badge" style="background: #e8f4f8; border-color: #bce0fd; padding: 10px;">
+                                        <span>Healthcare</span>
+                                        <strong style="color: #2980b9; font-size: 1.1rem;">${data.healthcare_spend}</strong>
+                                    </div>
+                                    <div class="d-badge" style="background: #fdf5e6; border-color: #fde0ba; padding: 10px;">
+                                        <span>Education</span>
+                                        <strong style="color: #e67e22; font-size: 1.1rem;">${data.education_spend}</strong>
+                                    </div>
+                                    <div class="d-badge" style="background: #eafaf1; border-color: #a8e6cf; padding: 10px;">
+                                        <span>Infrastructure</span>
+                                        <strong style="color: #27ae60; font-size: 1.1rem;">${data.infrastructure_spend}</strong>
                                     </div>
                                 </div>
                                 
@@ -443,11 +587,18 @@
             }
         }
 
-        // --- 3. RENDER FEATURED LEADERS ---
         const leaders = [
-            { name: "Hema Malini", role: "MP - Mathura", term: "2024-2029", edu: "PhD (Honorary)", commitments: [{t:"Yamuna Clean", s:"Ongoing", c:"fill-ongoing"}] },
-            { name: "Yogi Adityanath", role: "Chief Minister", term: "2022-2027", edu: "B.Sc Math", commitments: [{t:"Expressways", s:"Completed", c:"fill-completed"}] },
-            { name: "Akhilesh Yadav", role: "Opposition Leader", term: "2022-2027", edu: "Masters", commitments: [{t:"Metro", s:"Ongoing", c:"fill-ongoing"}] }
+            { name: "Hema Malini", role: "MP - Mathura", term: "2024-2029", edu: "PhD (Honorary)", healthcare: "₹120.00 Cr", education: "₹150.00 Cr", infrastructure: "₹300.00 Cr", commitments: [{t:"Yamuna Clean", s:"Ongoing", c:"fill-ongoing"}] },
+            { name: "Yogi Adityanath", role: "Chief Minister", term: "2022-2027", edu: "B.Sc Math", healthcare: "₹4500.50 Cr", education: "₹3200.75 Cr", infrastructure: "₹12500.00 Cr", commitments: [{t:"Expressways", s:"Completed", c:"fill-completed"}] },
+            { name: "Akhilesh Yadav", role: "Opposition Leader", term: "2022-2027", edu: "Masters", healthcare: "₹3100.20 Cr", education: "₹2800.50 Cr", infrastructure: "₹10200.00 Cr", commitments: [{t:"Metro", s:"Ongoing", c:"fill-ongoing"}] },
+            { name: "S. P. Singh Baghel", role: "MP - Agra", term: "2024-2029", edu: "Ph.D., LL.B.", healthcare: "₹180.50 Cr", education: "₹110.00 Cr", infrastructure: "₹450.20 Cr", commitments: [{t:"Agra Metro Extension", s:"Ongoing", c:"fill-ongoing"}] },
+            { name: "Baby Rani Maurya", role: "MLA - Agra Rural", term: "2022-2027", edu: "M.A., B.Ed.", healthcare: "₹95.00 Cr", education: "₹120.50 Cr", infrastructure: "₹280.00 Cr", commitments: [{t:"Women Safety Clinics", s:"Completed", c:"fill-completed"}] },
+            { name: "Shrikant Sharma", role: "MLA - Mathura", term: "2022-2027", edu: "B.A.", healthcare: "₹105.00 Cr", education: "₹85.00 Cr", infrastructure: "₹310.00 Cr", commitments: [{t:"Mathura Smart City", s:"Ongoing", c:"fill-ongoing"}] },
+            { name: "Yogendra Upadhyaya", role: "MLA - Agra South", term: "2022-2027", edu: "M.A., LL.B.", healthcare: "₹125.00 Cr", education: "₹95.00 Cr", infrastructure: "₹210.00 Cr", commitments: [{t:"Tech Corridors", s:"No Update", c:"fill-noupdate"}] },
+            { name: "Rajkumar Chahar", role: "MP - Fatehpur Sikri", term: "2024-2029", edu: "B.A.", healthcare: "₹85.50 Cr", education: "₹115.00 Cr", infrastructure: "₹320.00 Cr", commitments: [{t:"Agriculture Infra", s:"Ongoing", c:"fill-ongoing"}] },
+            { name: "Purshottam Khandelwal", role: "MLA - Agra North", term: "2022-2027", edu: "M.Com", healthcare: "₹110.00 Cr", education: "₹90.00 Cr", infrastructure: "₹200.00 Cr", commitments: [{t:"Urban Water Supply", s:"Completed", c:"fill-completed"}] },
+            { name: "Dr. G.S. Dharmesh", role: "MLA - Agra Cantt", term: "2022-2027", edu: "MBBS", healthcare: "₹150.00 Cr", education: "₹75.00 Cr", infrastructure: "₹180.00 Cr", commitments: [{t:"Cantt Hospital Upgrade", s:"Completed", c:"fill-completed"}] },
+            { name: "Jayant Chaudhary", role: "MP (RS) - Western UP", term: "2022-2028", edu: "M.Sc", healthcare: "₹95.00 Cr", education: "₹140.00 Cr", infrastructure: "₹290.00 Cr", commitments: [{t:"Farmer Subsidies", s:"Ongoing", c:"fill-ongoing"}] }
         ];
 
         function renderGrid() {
@@ -475,6 +626,13 @@
                             <div class="stat-grid">
                                 <div class="stat-item"><h4>Term</h4><p>${l.term}</p></div>
                                 <div class="stat-item"><h4>Education</h4><p>${l.edu}</p></div>
+                            </div>
+
+                            <div style="font-size:0.75rem; font-weight:700; color:#b2bec3; margin:15px 0 10px;">EXPENDITURE RECORD</div>
+                            <div class="stat-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 25px;">
+                                <div class="stat-item"><h4>Healthcare</h4><p style="font-size: 0.85rem; color: #2980b9;">${l.healthcare}</p></div>
+                                <div class="stat-item"><h4>Education</h4><p style="font-size: 0.85rem; color: #e67e22;">${l.education}</p></div>
+                                <div class="stat-item"><h4>Infrastructure</h4><p style="font-size: 0.85rem; color: #27ae60;">${l.infrastructure}</p></div>
                             </div>
                             
                             <button class="btn-verify" onclick="verifyGrid('${l.name}', '${uniqueId}')">
