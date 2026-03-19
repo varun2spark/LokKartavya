@@ -73,6 +73,49 @@ def get_myneta_data(name):
         print(f"Error fetching MyNeta: {e}")
         return None
 
+# --- 3. HELPER: MOCK EXPENDITURE DATA ---
+def get_mock_expenditure(name):
+    import random
+    n = name.lower()
+    
+    # Check for specific Mathura/Agra/UP leaders to match frontend exactly
+    if "yogi" in n or "adityanath" in n:
+        return {"healthcare": "₹4500.50 Cr", "education": "₹3200.75 Cr", "infrastructure": "₹12500.00 Cr"}
+    elif "akhilesh" in n:
+        return {"healthcare": "₹3100.20 Cr", "education": "₹2800.50 Cr", "infrastructure": "₹10200.00 Cr"}
+    elif "hema" in n and "malini" in n:
+        return {"healthcare": "₹120.00 Cr", "education": "₹150.00 Cr", "infrastructure": "₹300.00 Cr"}
+    elif "baghel" in n:
+        return {"healthcare": "₹180.50 Cr", "education": "₹110.00 Cr", "infrastructure": "₹450.20 Cr"}
+    elif "baby rani" in n or "maurya" in n:
+        return {"healthcare": "₹95.00 Cr", "education": "₹120.50 Cr", "infrastructure": "₹280.00 Cr"}
+    elif "shrikant" in n and "sharma" in n:
+        return {"healthcare": "₹105.00 Cr", "education": "₹85.00 Cr", "infrastructure": "₹310.00 Cr"}
+    elif "yogendra" in n and "upadhyaya" in n:
+        return {"healthcare": "₹125.00 Cr", "education": "₹95.00 Cr", "infrastructure": "₹210.00 Cr"}
+    elif "rajkumar" in n and "chahar" in n:
+        return {"healthcare": "₹85.50 Cr", "education": "₹115.00 Cr", "infrastructure": "₹320.00 Cr"}
+    elif "purshottam" in n and "khandelwal" in n:
+        return {"healthcare": "₹110.00 Cr", "education": "₹90.00 Cr", "infrastructure": "₹200.00 Cr"}
+    elif "dharmesh" in n:
+        return {"healthcare": "₹150.00 Cr", "education": "₹75.00 Cr", "infrastructure": "₹180.00 Cr"}
+    elif "jayant" in n and "chaudhary" in n:
+        return {"healthcare": "₹95.00 Cr", "education": "₹140.00 Cr", "infrastructure": "₹290.00 Cr"}
+    elif "bjp" in n:
+        return {"healthcare": "₹4500.50 Cr", "education": "₹3200.75 Cr", "infrastructure": "₹12500.00 Cr"}
+
+    # Fallback random generator
+    random.seed(name)
+    healthcare = f"₹{round(random.uniform(50, 500), 2)} Cr"
+    education = f"₹{round(random.uniform(50, 500), 2)} Cr"
+    infrastructure = f"₹{round(random.uniform(100, 1000), 2)} Cr"
+    
+    return {
+        "healthcare": healthcare,
+        "education": education,
+        "infrastructure": infrastructure
+    }
+
 # --- API ENDPOINTS ---
 
 @app.route('/api/search-leader', methods=['GET'])
@@ -91,13 +134,18 @@ def search_leader():
             "source_url": "https://www.myneta.info"
         }
 
+    expenditure_data = get_mock_expenditure(query)
+
     return jsonify({
         "name": wiki_data['wiki_name'],
         "bio": wiki_data['bio'],
         "image": wiki_data['image'],
         "criminal_cases": myneta_data['criminal_cases'],
         "assets": myneta_data['assets'],
-        "source_url": myneta_data['source_url']
+        "source_url": myneta_data['source_url'],
+        "healthcare_spend": expenditure_data['healthcare'],
+        "education_spend": expenditure_data['education'],
+        "infrastructure_spend": expenditure_data['infrastructure']
     })
 
 @app.route('/api/report-issue', methods=['POST'])
