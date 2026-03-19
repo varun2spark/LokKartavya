@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LokKartavya Pro</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --primary:#ff7a18;
+  --secondary:#1e293b;
+  --bg:#f1f5f9;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:var(--bg)}
+
+nav{
+  background:rgba(30,41,59,0.9);
+  color:white;
+  padding:15px 5%;
+  display:flex;
+  justify-content:space-between;
+  position:fixed;
+  width:100%;
+  backdrop-filter:blur(10px);
+}
+
+.hero{
+  height:90vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#1e293b,#334155);
+  color:white;
+  text-align:center;
+}
+
+.hero h1{font-size:3rem;margin-bottom:20px}
+
+.search-box{
+  padding:15px 20px;
+  border-radius:30px;
+  border:none;
+  width:300px;
+  margin-right:10px;
+}
+
+.btn{
+  padding:12px 25px;
+  border:none;
+  border-radius:30px;
+  background:var(--primary);
+  color:white;
+  cursor:pointer;
+}
+
+.container{
+  max-width:1000px;
+  margin:-80px auto 50px;
+}
+
+.card{
+  background:white;
+  padding:25px;
+  border-radius:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+  margin-bottom:30px;
+}
+
+.profile{
+  display:flex;
+  gap:20px;
+}
+
+.profile img{
+  width:150px;
+  border-radius:10px;
+}
+
+.chart-box{
+  background:white;
+  padding:20px;
+  border-radius:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+.report{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+input,textarea{
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #ddd;
+}
+
+@media(max-width:768px){
+  .profile{flex-direction:column}
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <h3>LokKartavya</h3>
+</nav>
+
+<section class="hero">
+  <h1>Know Your Leader</h1>
+  <div>
+    <input id="search" class="search-box" placeholder="Search politician...">
+    <button class="btn" onclick="searchLeader()">Search</button>
+  </div>
+</section>
+
+<div class="container">
+  <div id="result" class="card"></div>
+
+  <div class="chart-box">
+    <canvas id="chart"></canvas>
+  </div>
+
+  <div class="card report">
+    <h3>📍 Report Issue</h3>
+    <input id="loc" readonly>
+    <textarea id="desc" placeholder="Describe issue"></textarea>
+    <button class="btn" onclick="reportIssue()">Submit</button>
+  </div>
+</div>
+
+<script>
+
+navigator.geolocation.getCurrentPosition(pos=>{
+  document.getElementById("loc").value=`${pos.coords.latitude}, ${pos.coords.longitude}`
+})
+
+async function searchLeader(){
+  const name=document.getElementById("search").value
+  const result=document.getElementById("result")
+
+  const res=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${name}`)
+  const data=await res.json()
+
+  result.innerHTML=`
+    <div class="profile">
+      <img src="${data.thumbnail?.source || ''}">
+      <div>
+        <h2>${data.title}</h2>
+        <p>${data.extract}</p>
+      </div>
+    </div>
+  `
+
+  const cases=Math.floor(Math.random()*10)
+  const assets=Math.floor(Math.random()*100)
+
+  new Chart(document.getElementById('chart'),{
+    type:'bar',
+    data:{
+      labels:['Cases','Assets'],
+      datasets:[{data:[cases,assets]}]
+    }
+  })
+}
+
+function reportIssue(){
+  alert("Report submitted successfully")
+}
+
+</script>
+
+</body>
+</html>
