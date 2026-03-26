@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politicians Directory - LokKartavya</title>
+    <link rel="stylesheet" href="/static/style.css?v=2">
+    <script src="/static/data.js?v=2"></script>
+</head>
+<body style="background-color: #F3F4F6;">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                LokKartavya
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="politicians.html" style="color: var(--primary);">Politicians</a>
+                <a href="about.html">About Us</a>
+                <a href="feedback.html">Feedback</a>
+                <a href="#" class="nav-cta" onclick="logout()">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <h1 style="font-size: 2.5rem; color: var(--dark); margin-bottom: 0.5rem;">Politician Directory</h1>
+            <p style="color: var(--dark-light); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                Explore real-time data, budget allocations, and performance metrics for your elected representatives.
+            </p>
+        </div>
+
+        <div class="grid" id="politicianList">
+            <!-- Data will be inserted here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const listElement = document.getElementById('politicianList');
+            const defaultNames = ['Narendra Modi', 'Rahul Gandhi', 'Rekha Gupta', 'Amit Shah', 'Mamata Banerjee', 'Arvind Kejriwal'];
+            
+            listElement.innerHTML = '<p style="text-align:center; grid-column: 1/-1; color: var(--dark-light);">Loading politician data from live sources...</p>';
+            
+            try {
+                const fetchedData = await Promise.all(defaultNames.map(async (name) => {
+                    try {
+                        const res = await fetch(`${API_BASE_URL}/leader?name=${encodeURIComponent(name)}`);
+                        if (!res.ok) return null;
+                        return await res.json();
+                    } catch {
+                        return null;
+                    }
+                }));
+                
+                listElement.innerHTML = '';
+                
+                fetchedData.forEach(pol => {
+                    if (!pol || pol.error) return;
+                    
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <img src="${pol.image || 'https://ui-avatars.com/api/?name='+encodeURIComponent(pol.name)+'&background=random&color=fff&size=200'}" alt="${pol.name}" class="card-img" style="object-fit: cover; object-position: top; background: #E5E7EB;">
+                            <div class="card-title">${pol.name}</div>
+                            <span class="badge" style="margin-bottom: 0.5rem;">${pol.role}</span>
+                            <div>
+                                <span style="font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 9999px; background-color: ${pol.criminal_cases === 0 ? '#D1FAE5' : '#FEE2E2'}; color: ${pol.criminal_cases === 0 ? '#065F46' : '#991B1B'}; display: inline-block; margin-bottom: 1rem;">
+                                    ${pol.criminal_cases} Pending Cases
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-info">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                                <span>Edu: ${pol.education}</span>
+                            </div>
+                            <div class="card-info mt-2">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                <span>Assets: ${pol.assets}</span>
+                            </div>
+                            <div class="card-info mt-2" style="border-top: 1px solid #F3F4F6; padding-top: 0.5rem; margin-top: 0.75rem; font-size: 0.7rem;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--dark-light)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                <span style="color: var(--dark-light); font-style: italic;">Sources: Wikipedia, MyNeta</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="politician-detail.html?name=${encodeURIComponent(pol.name)}" class="btn text-center">View Full Profile</a>
+                        </div>
+                    `;
+                    listElement.appendChild(card);
+                });
+            } catch (err) {
+                listElement.innerHTML = '<p style="text-align:center; color:red; grid-column: 1/-1;">Error connecting to the backend server. Is Flask running?</p>';
+            }
+        });
+    </script>
+</body>
+</html>

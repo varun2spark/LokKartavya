@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LokKartavya - Track Your Politicians</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/data.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                LokKartavya
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="politicians.html">Politicians</a>
+                <a href="about.html">About Us</a>
+                <a href="feedback.html">Feedback</a>
+                <a href="#" class="nav-cta" onclick="logout()">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>Transparency in Governance</h1>
+        <p>Your ultimate platform to track, analyze, and understand the performance of your elected representatives. Know where your tax money is being spent.</p>
+        <div class="hero-buttons">
+            <a href="politicians.html" class="btn">Explore Politicians</a>
+            <a href="about.html" class="btn btn-secondary">Learn More</a>
+        </div>
+    </div>
+
+    <div class="container text-center">
+        <h2 style="font-size: 2rem; color: var(--dark); margin-bottom: 3rem;">Why LokKartavya?</h2>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); text-align: left; gap: 2rem;">
+            <div class="card" style="padding: 2rem; border: none;">
+                <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.25rem;">Real-time Budget Tracking</h3>
+                <p>Gain insights into how allocated funds are utilized across crucial sectors like healthcare, education, and infrastructure.</p>
+            </div>
+            <div class="card" style="padding: 2rem; border: none;">
+                <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.25rem;">Hold Leaders Accountable</h3>
+                <p>View the gap between commitments and actual deliveries. We parse the data so you can easily assess performance.</p>
+            </div>
+            <div class="card" style="padding: 2rem; border: none;">
+                <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.25rem;">Citizen Feedback</h3>
+                <p>Submit issues directly. Highlight concerns in your constituency and make your voice heard at scale.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

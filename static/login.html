@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - LokKartavya</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/data.js"></script>
+</head>
+<body style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background-color: #F8FAFC;">
+    
+    <div class="form-card">
+        <div class="text-center" style="margin-bottom: 2rem;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto;">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+            <h2 style="margin-top: 1rem; margin-bottom: 0.5rem;">Welcome Back</h2>
+            <p style="color: var(--dark-light); font-size: 0.95rem;">Please enter your credentials to access LokKartavya</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="email" required placeholder="you@example.com">
+            </div>
+            
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" required placeholder="••••••••">
+            </div>
+            
+            <button type="submit" class="btn w-100" style="padding: 1rem; margin-top: 0.5rem;">Sign In</button>
+        </form>
+        
+        <p class="text-center" style="margin-top: 2rem; font-size: 0.95rem; color: var(--dark-light);">
+            Don't have an account? <a href="register.html" style="color: var(--primary); font-weight: 600; text-decoration: none;">Create one</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = this.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = "Authenticating...";
+            
+            setTimeout(() => {
+                localStorage.setItem('lokkartavya_loggedIn', 'true');
+                window.location.href = 'index.html';
+            }, 500);
+        });
+    </script>
+</body>
+</html>

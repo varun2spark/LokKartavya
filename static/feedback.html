@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - LokKartavya</title>
+    <link rel="stylesheet" href="/static/style.css?v=2">
+    <script src="/static/data.js?v=2"></script>
+</head>
+<body style="background-color: #F8FAFC;">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                LokKartavya
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="politicians.html">Politicians</a>
+                <a href="about.html">About Us</a>
+                <a href="feedback.html" style="color: var(--primary);">Feedback</a>
+                <a href="#" class="nav-cta" onclick="logout()">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-card" style="max-width: 600px;">
+            <h2>Raise an Issue</h2>
+            <p style="text-align: center; color: var(--dark-light); margin-bottom: 2rem;">
+                Help us improve the platform or report discrepancies in transparency data.
+            </p>
+            
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="name" required placeholder="John Doe">
+                </div>
+                
+                <div class="form-group">
+                    <label>Subject Topic</label>
+                    <input type="text" id="subject" required placeholder="E.g., Missing constituency data">
+                </div>
+
+                <div class="form-group">
+                    <label>Detailed Message</label>
+                    <textarea id="message" rows="5" required placeholder="Please describe the issue in detail..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn w-100" style="padding: 1rem; font-size: 1.1rem;">Submit Feedback</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btn = this.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = "Sending...";
+            btn.style.opacity = "0.7";
+            btn.disabled = true;
+            
+            const name = document.getElementById('name').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            try {
+                const res = await fetch(`${API_BASE_URL}/feedback`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, subject, message })
+                });
+                
+                if (res.ok) {
+                    alert('Thank you for your feedback! It has been recorded securely.');
+                    this.reset();
+                } else {
+                    alert('Failed to submit feedback.');
+                }
+            } catch (err) {
+                alert('Error submitting feedback. Is the server running?');
+            } finally {
+                btn.innerText = originalText;
+                btn.style.opacity = "1";
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

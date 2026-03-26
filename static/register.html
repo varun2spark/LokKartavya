@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - LokKartavya</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/data.js"></script>
+</head>
+<body style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background-color: #F8FAFC;">
+    
+    <div class="form-card">
+        <div class="text-center" style="margin-bottom: 2rem;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto;">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+            <h2 style="margin-top: 1rem; margin-bottom: 0.5rem;">Create Account</h2>
+            <p style="color: var(--dark-light); font-size: 0.95rem;">Join LokKartavya and start tracking</p>
+        </div>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="name" required placeholder="John Doe">
+            </div>
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="email" required placeholder="you@example.com">
+            </div>
+            
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" required placeholder="Create a strong password">
+            </div>
+            
+            <button type="submit" class="btn w-100" style="padding: 1rem; margin-top: 0.5rem;">Register Now</button>
+        </form>
+        
+        <p class="text-center" style="margin-top: 2rem; font-size: 0.95rem; color: var(--dark-light);">
+            Already have an account? <a href="login.html" style="color: var(--primary); font-weight: 600; text-decoration: none;">Sign in here</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = this.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = "Creating account...";
+            
+            setTimeout(() => {
+                alert('Account created successfully! Please sign in.');
+                window.location.href = 'login.html';
+            }, 600);
+        });
+    </script>
+</body>
+</html>

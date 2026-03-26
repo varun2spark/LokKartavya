@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politician Dashboard - LokKartavya</title>
+    <link rel="stylesheet" href="/static/style.css?v=2">
+    <script src="/static/data.js?v=2"></script>
+</head>
+<body style="background-color: #F8FAFC;">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                LokKartavya
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="politicians.html" style="color: var(--primary);">Politicians</a>
+                <a href="about.html">About Us</a>
+                <a href="feedback.html">Feedback</a>
+                <a href="#" class="nav-cta" onclick="logout()">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" id="detailContainer">
+        <h2 style="text-align: center; color: var(--dark-light); margin-top: 4rem;">Loading details...</h2>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const params = new URLSearchParams(window.location.search);
+            const name = params.get('name');
+            const container = document.getElementById('detailContainer');
+
+            if (!name) {
+                container.innerHTML = `
+                    <div class="text-center" style="margin-top: 4rem;">
+                        <h2>Politician not found.</h2>
+                        <a href="politicians.html" class="btn mt-4">Browse Directory</a>
+                    </div>`;
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/leader?name=${encodeURIComponent(name)}`);
+                if (!res.ok) throw new Error("Not found");
+                const politician = await res.json();
+                
+                if (politician.error) throw new Error(politician.error);
+
+                // Calculate percentage used if possible
+                let percentage = 0;
+                if (politician.budget) {
+                    let totalVal = parseFloat(politician.budget.total.replace(/[^0-9.]/g, ''));
+                    let usedVal = parseFloat(politician.budget.utilized.replace(/[^0-9.]/g, ''));
+                    if(!isNaN(totalVal) && !isNaN(usedVal) && totalVal > 0) {
+                        percentage = Math.round((usedVal / totalVal) * 100);
+                    } else {
+                        percentage = 65; 
+                    }
+                }
+
+                // Format Categories
+                let breakdownItems = '';
+                if (politician.budget && politician.budget.categories) {
+                    breakdownItems = '<div class="category-bars">' + politician.budget.categories.map(cat => `
+                        <div class="category-item">
+                            <div class="category-header">
+                                <span>${cat.name}</span>
+                                <span style="color: ${cat.color}; font-weight: 600;">${cat.amount} <span style="color: var(--dark-light); font-weight: 500; font-size: 0.85rem;">(${cat.percentage}%)</span></span>
+                            </div>
+                            <div class="category-bar-bg">
+                                <div class="category-bar-fill" style="width: ${cat.percentage}%; background-color: ${cat.color}; transition: width 1s ease-out;"></div>
+                            </div>
+                        </div>
+                    `).join('') + '</div>';
+                }
+
+                // Format Commitments
+                let commitmentsHTML = '';
+                if (politician.commitments) {
+                    commitmentsHTML = politician.commitments.map(c => `
+                        <div class="timeline-item">
+                            <div class="timeline-title">${c.title}</div>
+                            <span class="status status-${c.status}">${c.status.replace('-', ' ')}</span>
+                        </div>
+                    `).join('');
+                }
+
+                // Format Issues
+                let issuesHTML = '<p style="color: var(--dark-light); font-style: italic;">No issues reported yet.</p>';
+                if (politician.issues && politician.issues.length > 0) {
+                    issuesHTML = politician.issues.map(issue => `
+                        <div class="issue-card">
+                            <div class="issue-title">${issue.title}</div>
+                            <div class="issue-date">Reported on: ${issue.date}</div>
+                        </div>
+                    `).join('');
+                }
+
+                // Format Criminal Details
+                let criminalDetailsHTML = '';
+                if (politician.criminal_details && politician.criminal_details.length > 0) {
+                    criminalDetailsHTML = `
+                        <div class="dashboard-section" style="margin-top: 2rem; border-left: 4px solid #EF4444; background: #FEF2F2;">
+                            <h3 style="font-size: 1.25rem; color: #991B1B; display: flex; align-items: center; gap: 0.5rem;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                Pending Case Details
+                            </h3>
+                            <ul style="margin-top: 1rem; padding-left: 1.5rem; color: #7F1D1D;">
+                                ${politician.criminal_details.map(detail => `<li style="margin-bottom: 0.5rem;">${detail}</li>`).join('')}
+                            </ul>
+                            <div style="font-size: 0.7rem; color: #991B1B; margin-top: 0.5rem; margin-left: 0.5rem; font-style: italic;">Source: ADR India / MyNeta Affidavits</div>
+                        </div>
+                    `;
+                }
+
+                container.innerHTML = `
+                    <div style="margin-bottom: 2rem;">
+                        <a href="politicians.html" style="color: var(--primary); text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                            Back to Directory
+                        </a>
+                    </div>
+
+                    <div class="profile-header" style="align-items: flex-start;">
+                        <img src="${politician.image || 'https://ui-avatars.com/api/?name='+encodeURIComponent(politician.name)+'&background=random&color=fff&size=200'}" alt="${politician.name}" class="profile-img-large" style="object-fit: cover; object-position: top; background: #E5E7EB;">
+                        <div class="profile-info" style="flex-grow: 1;">
+                            <h1>${politician.name}</h1>
+                            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 1rem;">
+                                <span class="badge" style="margin-bottom: 0;">${politician.role}</span>
+                                <span style="font-size: 0.85rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; background-color: ${politician.criminal_cases === 0 ? '#D1FAE5' : '#FEE2E2'}; color: ${politician.criminal_cases === 0 ? '#065F46' : '#991B1B'}; border: 1px solid ${politician.criminal_cases === 0 ? '#34D399' : '#F87171'};">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 2px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                    ${politician.criminal_cases} Pending Cases
+                                </span>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                                <div>
+                                    <div class="profile-meta" style="margin-bottom: 0.5rem; font-size: 0.95rem;">
+                                        <strong><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Constituency:</strong> ${politician.constituency || 'N/A'}
+                                    </div>
+                                    <div class="profile-meta" style="margin-bottom: 0.5rem; font-size: 0.95rem;">
+                                        <strong><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Term Duration:</strong> ${politician.term || 'N/A'}
+                                    </div>
+                                    <div class="profile-meta" style="margin-bottom: 0.5rem; font-size: 0.95rem;">
+                                        <strong><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> Education:</strong> ${politician.education}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="profile-meta" style="margin-bottom: 0.5rem; font-size: 1rem; line-height: 1.6;">
+                                        <strong>Biography:</strong> 
+                                        <div style="color: var(--dark); margin-top: 0.5rem;">${politician.summary}</div>
+                                        <div style="font-size: 0.7rem; color: var(--dark-light); margin-top: 0.5rem; font-style: italic;">Source: Wikipedia</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid" style="grid-template-columns: 2fr 1fr; gap: 2rem; align-items: start; margin-top: 2rem;">
+                        
+                        <!-- Left Column: Budget & Commitments -->
+                        <div>
+                            ${criminalDetailsHTML}
+
+                            <h2 style="font-size: 1.75rem; color: var(--dark); margin-bottom: 1.5rem; margin-top: ${politician.criminal_details && politician.criminal_details.length > 0 ? '2.5rem' : '0'};">Financial Overview</h2>
+                            
+                            <div class="stats-grid" style="margin-bottom: 1rem;">
+                                <div class="stat-card" style="padding: 1rem;">
+                                    <div class="stat-card-title">Total Allocated</div>
+                                    <div class="stat-card-value" style="font-size: 1.5rem;">${politician.budget ? politician.budget.total : 'N/A'}</div>
+                                </div>
+                                <div class="stat-card" style="padding: 1rem;">
+                                    <div class="stat-card-title">Utilized</div>
+                                    <div class="stat-card-value primary" style="font-size: 1.5rem;">${politician.budget ? politician.budget.utilized : 'N/A'}</div>
+                                </div>
+                                <div class="stat-card" style="padding: 1rem;">
+                                    <div class="stat-card-title">Rate</div>
+                                    <div class="stat-card-value success" style="font-size: 1.5rem;">${percentage}%</div>
+                                    <div style="width: 100%; background: #E5E7EB; border-radius: 9999px; height: 6px; margin-top: 0.5rem;">
+                                        <div style="background: var(--secondary); width: ${percentage}%; height: 100%; border-radius: 9999px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="dashboard-section" style="margin-bottom: 2rem;">
+                                <h3 style="font-size: 1.25rem;">Categorical Expenditure Overview</h3>
+                                ${breakdownItems}
+                                <div style="font-size: 0.7rem; color: var(--dark-light); margin-top: 0.5rem; font-style: italic;">Source: Ministry of Finance / Official Budget Documents</div>
+                            </div>
+
+                            <div class="dashboard-section">
+                                <h3 style="font-size: 1.25rem;">Commitment Tracker</h3>
+                                <p style="color: var(--dark-light); margin-bottom: 1.5rem;">Track the status of key manifesto promises.</p>
+                                ${commitmentsHTML}
+                                <div style="font-size: 0.7rem; color: var(--dark-light); margin-top: 0.5rem; font-style: italic;">Source: Political Manifesto / Party Website</div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Reporting -->
+                        <div class="dashboard-section" style="background: var(--white); border: 2px solid #F3F4F6;">
+                            <h3 style="font-size: 1.25rem;">Constituency Issues</h3>
+                            <p style="color: var(--dark-light); margin-bottom: 1.5rem; font-size: 0.9rem;">Publicly reported problems in ${politician.constituency || 'this constituency'}.</p>
+                            
+                            <div style="margin-bottom: 2rem; max-height: 400px; overflow-y: auto; padding-right: 0.5rem;">
+                                ${issuesHTML}
+                            </div>
+
+                            <div style="border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                                <form id="issueForm">
+                                    <div class="form-group" style="margin-bottom: 1rem;">
+                                        <input type="text" id="issueTitle" required placeholder="Brief title of the issue" style="font-size: 0.9rem; padding: 0.6rem;">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 1rem;">
+                                        <textarea id="issueDesc" rows="3" required placeholder="Details..." style="font-size: 0.9rem; padding: 0.6rem;"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn w-100" style="padding: 0.75rem; font-size: 0.95rem;">Submit Report</button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                `;
+
+                // Setup issue form
+                document.getElementById('issueForm').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const btn = this.querySelector('button');
+                    const originalText = btn.innerText;
+                    btn.innerText = "Submitting...";
+                    btn.disabled = true;
+                    
+                    const title = document.getElementById('issueTitle').value;
+                    const desc = document.getElementById('issueDesc').value;
+                    
+                    try {
+                        const postRes = await fetch(`${API_BASE_URL}/issue`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ title: title, description: desc })
+                        });
+                        if(postRes.ok) {
+                            alert('Issue reported successfully. It will appear on the dashboard after review.');
+                            this.reset();
+                        } else {
+                            alert('Failed to report issue.');
+                        }
+                    } catch (e) {
+                        alert('Error submitting issue.');
+                    } finally {
+                        btn.innerText = originalText;
+                        btn.disabled = false;
+                    }
+                });
+                
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="text-center" style="margin-top: 4rem;">
+                        <h2 style="color:red;">Error loading details.</h2>
+                        <a href="politicians.html" class="btn mt-4">Browse Directory</a>
+                    </div>`;
+            }
+        });
+    </script>
+</body>
+</html>
