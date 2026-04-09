@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LokKartavya Advanced</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body { font-family: Arial; margin:0; background:#f4f4f4; }
+.hero { background:#2c3e50; color:white; padding:40px; text-align:center; }
+input { padding:10px; width:250px; }
+button { padding:10px 15px; background:#e67e22; color:white; border:none; }
+.result { margin:20px; background:white; padding:20px; border-radius:10px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+    <h2>LokKartavya (Advanced)</h2>
+    <input id="search" placeholder="Search politician">
+    <button onclick="searchLeader()">Search</button>
+</div>
+
+<div id="result" class="result"></div>
+<canvas id="chart" width="400" height="200"></canvas>
+
+<h3 style="margin-left:20px;">📍 Report Issue</h3>
+<input id="loc" placeholder="Location" readonly>
+<textarea id="desc" placeholder="Describe issue"></textarea>
+<button onclick="reportIssue()">Submit</button>
+
+<script>
+
+// AUTO GEOLOCATION
+navigator.geolocation.getCurrentPosition(pos => {
+    document.getElementById("loc").value = `${pos.coords.latitude}, ${pos.coords.longitude}`;
+});
+
+async function searchLeader() {
+    const name = document.getElementById("search").value;
+    const result = document.getElementById("result");
+
+    // WIKIPEDIA API
+    const wikiRes = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${name}`);
+    const wiki = await wikiRes.json();
+
+    // FAKE DATA (replace with backend later)
+    const cases = Math.floor(Math.random()*10);
+    const assets = Math.floor(Math.random()*100);
+
+    result.innerHTML = `
+        <h2>${wiki.title}</h2>
+        <p>${wiki.extract}</p>
+    `;
+
+    // CHART
+    new Chart(document.getElementById('chart'), {
+        type: 'bar',
+        data: {
+            labels: ['Criminal Cases', 'Assets (Cr)'],
+            datasets: [{ data: [cases, assets] }]
+        }
+    });
+}
+
+function reportIssue() {
+    const loc = document.getElementById("loc").value;
+    const desc = document.getElementById("desc").value;
+
+    alert(`Report submitted\nLocation: ${loc}\nDesc: ${desc}`);
+}
+
+</script>
+
+</body>
+</html>
